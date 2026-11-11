@@ -206,4 +206,70 @@
 
   <script>
     // URL de exportação CSV da planilha pública fornecida
-    const SHEET_CSV_URL = '
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1E7QJBlUk0kR5eXFFkAgqnYDBVEHry29ClCFTPONKnMI/export?format=csv';
+
+    async function fetchRouteData() {
+      try {
+        const response = await fetch(`${SHEET_CSV_URL}&t=${new Date().getTime()}`);
+        const csvText = await response.text();
+        parseAndRenderCSV(csvText);
+        
+        const now = new Date();
+        document.getElementById('last-update').innerText = 
+          `Última atualização: ${now.toLocaleTimeString('pt-BR')}`;
+      } catch (error) {
+        console.error('Erro ao buscar dados da planilha:', error);
+        document.getElementById('last-update').innerText = 
+          'Erro ao atualizar dados. Tentando novamente em instantes...';
+      }
+    }
+
+    function parseAndRenderCSV(csvText) {
+      const lines = csvText.trim().split('\n');
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = '';
+
+      // Ignora o cabeçalho (linha 0) e itera pelas linhas de dados
+      const items = [];
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const [local, percorrido] = lines[i].split(',').map(cell => cell.trim().replace(/^"|"$/g, ''));
+        if (local) {
+          items.push({
+            local: local,
+            percorrido: (percorrido || '').toLowerCase() === 'sim'
+          });
+        }
+      }
+
+      items.forEach((item, index) => {
+        const step = document.createElement('div');
+        step.className = `step ${item.percorrido ? 'completed' : ''}`;
+        
+        // Marca o último ponto atingido como o local ativo no momento
+        if (item.percorrido && (index === items.length - 1 || !items[index + 1]?.percorrido)) {
+          step.classList.add('active');
+        }
+
+        const circle = document.createElement('div');
+        circle.className = 'circle';
+        circle.innerText = index + 1;
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.innerText = item.local;
+
+        step.appendChild(circle);
+        step.appendChild(label);
+        timeline.appendChild(step);
+      });
+    }
+
+    // Carrega na abertura da página
+    fetchRouteData();
+
+    // Atualiza a cada 10 segundos (10000ms)
+    setInterval(fetchRouteData, 10000);
+  </script>
+</body>
+</html>
