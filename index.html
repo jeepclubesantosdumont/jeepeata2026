@@ -1,281 +1,455 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeepata de Natal 2026 - Jeep Clube Santos Dumont</title>
-  <!-- Fontes do Google para estilo festivo natalino e moderno -->
-  <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* ==========================================================================
-       1. CONFIGURAÇÃO DE CORES E ESTILOS BASE
-       ========================================================================== */
-    :root {
-      --bg-dark: #0a1128;
-      --card-bg: rgba(26, 38, 76, 0.85);
-      --text-light: #f1f5f9;
-      --text-gold: #f6c445;
-      --color-green: #10b981;
-      --color-green-glow: rgba(16, 185, 129, 0.4);
-      --color-yellow: #fbbf24;
-      --color-yellow-glow: rgba(251, 191, 36, 0.4);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jeepata de Natal 2026 - Jeep Clube Santos Dumont</title>
+
+<style>
+:root{
+    --bg:#081221;
+    --card:#102038;
+    --yellow:#ffd54f;
+    --green:#00c853;
+    --white:#ffffff;
+    --line-width:8px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:linear-gradient(180deg,#07111d,#102542);
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+.header{
+    text-align:center;
+    padding:30px 20px 10px;
+}
+
+.header h1{
+    font-size:clamp(1.8rem,4vw,3rem);
+    margin-bottom:10px;
+}
+
+.header p{
+    color:#d4d4d4;
+}
+
+.status{
+    text-align:center;
+    margin-top:10px;
+    color:#9de49d;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    position:relative;
+    padding:40px 20px 80px;
+}
+
+/* Luzes natalinas */
+
+.lights{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.light{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    animation:blink 2s infinite;
+}
+
+.light:nth-child(4n+1){background:#ff1744;}
+.light:nth-child(4n+2){background:#00e676;}
+.light:nth-child(4n+3){background:#2979ff;}
+.light:nth-child(4n+4){background:#ffd600;}
+
+@keyframes blink{
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+    }
+    50%{
+        opacity:.4;
+        transform:scale(.8);
+    }
+}
+
+/* Área do percurso */
+
+.route-wrapper{
+    position:relative;
+    max-width:900px;
+    margin:0 auto;
+}
+
+.route{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+}
+
+/* Jipe */
+
+#jeep{
+    position:absolute;
+    left:calc(50% - 180px);
+    font-size:42px;
+    transition:top 1.5s ease;
+    z-index:50;
+}
+
+.route-item{
+    position:relative;
+    min-height:110px;
+}
+
+.line{
+    position:absolute;
+    left:50%;
+    top:0;
+    width:var(--line-width);
+    height:100%;
+    transform:translateX(-50%);
+    background:var(--yellow);
+    z-index:1;
+}
+
+.line.completed{
+    background:var(--green);
+}
+
+.circle{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:3px solid white;
+    background:var(--yellow);
+    z-index:2;
+}
+
+.circle.completed{
+    background:var(--green);
+}
+
+.location{
+    position:absolute;
+    left:calc(50% + 35px);
+    top:50%;
+    transform:translateY(-50%);
+    padding:12px 16px;
+    background:rgba(255,255,255,.08);
+    border-radius:12px;
+    backdrop-filter:blur(8px);
+    min-width:220px;
+}
+
+.location .name{
+    font-weight:bold;
+}
+
+.location .done{
+    color:#8cff8c;
+    margin-top:5px;
+}
+
+.footer-message{
+    text-align:center;
+    margin-top:40px;
+    font-size:1.4rem;
+    color:#7bff7b;
+    display:none;
+}
+
+.loading{
+    text-align:center;
+    margin-top:40px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    #jeep{
+        left:15px;
+        font-size:34px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    .line{
+        left:90px;
     }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top, #1c2d5a 0%, var(--bg-dark) 100%);
-      color: var(--text-light);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 15px 50px 15px;
-      position: relative;
-      overflow-x: hidden;
+    .circle{
+        left:90px;
     }
 
-    /* ==========================================================================
-       2. DECORAÇÃO NATALINA (LUZES PISCANTES)
-       ========================================================================== */
-    .christmas-lights {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 800px;
-      margin-bottom: 20px;
-      padding: 0 10px;
-      list-style: none;
+    .location{
+        left:130px;
+        min-width:auto;
+        width:calc(100% - 150px);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🎄 Jeepata de Natal 2026 - Jeep Clube Santos Dumont</h1>
+    <p>Acompanhe em tempo real o percurso da Jeepata</p>
+
+    <div class="lights">
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+    </div>
+
+    <div class="status" id="lastUpdate">
+        Carregando percurso...
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="route-wrapper">
+
+        <div id="jeep">🚙🎅</div>
+
+        <div class="route" id="route"></div>
+
+    </div>
+
+    <div id="completedMessage" class="footer-message">
+        🎄 Percurso concluído! Feliz Natal! 🎅
+    </div>
+
+    <div class="loading" id="loading">
+        Carregando dados...
+    </div>
+
+</div>
+
+<script>
+/* ===================================================
+   CONFIGURAÇÕES
+=================================================== */
+
+/*
+Publique sua planilha em CSV e substitua a URL abaixo.
+
+Exemplo:
+https://docs.google.com/spreadsheets/d/SEU_ID/export?format=csv&gid=0
+*/
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/1E7QJBlUk0kR5eXFFkAgqnYDBVEHry29ClCFTPONKnMI/export?format=csv&gid=0";
+
+const UPDATE_INTERVAL = 30000;
+
+/* ===================================================
+   ELEMENTOS
+=================================================== */
+
+const routeContainer = document.getElementById("route");
+const jeep = document.getElementById("jeep");
+const loading = document.getElementById("loading");
+const completedMessage = document.getElementById("completedMessage");
+const lastUpdate = document.getElementById("lastUpdate");
+
+/* ===================================================
+   CSV -> JSON
+=================================================== */
+
+function csvToJson(csv){
+
+    const lines = csv.trim().split("\n");
+
+    if(lines.length <= 1){
+        return [];
     }
 
-    .christmas-lights li {
-      width: 12px;
-      height: 20px;
-      border-radius: 50%;
-      position: relative;
-      animation: flash 1.5s infinite ease-in-out alternate;
+    const headers = lines[0]
+        .split(",")
+        .map(h => h.trim());
+
+    return lines
+        .slice(1)
+        .map(line => {
+
+            const values = line.split(",");
+
+            const obj = {};
+
+            headers.forEach((header,index)=>{
+                obj[header] = values[index]
+                    ? values[index].replace(/"/g,"").trim()
+                    : "";
+            });
+
+            return obj;
+        });
+}
+
+/* ===================================================
+   BUSCA PLANILHA
+=================================================== */
+
+async function loadRoute(){
+
+    try{
+
+        const response = await fetch(CSV_URL + "&nocache=" + Date.now());
+
+        const csv = await response.text();
+
+        const data = csvToJson(csv);
+
+        renderRoute(data);
+
+        loading.style.display = "none";
+
+        lastUpdate.innerHTML =
+            "Última atualização: " +
+            new Date().toLocaleTimeString("pt-BR");
+
+    }catch(error){
+
+        console.error(error);
+
+        loading.innerHTML =
+            "Erro ao carregar a planilha.";
+
     }
 
-    .christmas-lights li:nth-child(4n+1) { background: #ef4444; box-shadow: 0 0 10px #ef4444; animation-delay: 0s; }
-    .christmas-lights li:nth-child(4n+2) { background: #10b981; box-shadow: 0 0 10px #10b981; animation-delay: 0.4s; }
-    .christmas-lights li:nth-child(4n+3) { background: #fbbf24; box-shadow: 0 0 10px #fbbf24; animation-delay: 0.8s; }
-    .christmas-lights li:nth-child(4n+4) { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; animation-delay: 1.2s; }
+}
 
-    @keyframes flash {
-      0% { opacity: 0.3; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1.1); }
+/* ===================================================
+   RENDERIZAÇÃO
+=================================================== */
+
+function renderRoute(locations){
+
+    routeContainer.innerHTML = "";
+
+    let nextIndex = -1;
+
+    locations.forEach((item,index)=>{
+
+        const completed =
+            String(item.Percurso)
+            .toLowerCase()
+            .trim() === "sim";
+
+        if(!completed && nextIndex === -1){
+            nextIndex = index;
+        }
+
+        const div = document.createElement("div");
+
+        div.className = "route-item";
+
+        div.innerHTML = `
+            <div class="line ${completed ? 'completed' : ''}"></div>
+
+            <div class="circle ${completed ? 'completed' : ''}">
+            </div>
+
+            <div class="location">
+                <div class="name">
+                    ${item.Localidade || item.localidade || "Local"}
+                </div>
+
+                ${
+                    completed
+                    ?
+                    '<div class="done">✅ Percorrido</div>'
+                    :
+                    '<div>🟡 Aguardando passagem</div>'
+                }
+            </div>
+        `;
+
+        routeContainer.appendChild(div);
+
+    });
+
+    moveJeep(locations,nextIndex);
+}
+
+/* ===================================================
+   POSIÇÃO DO JIPE
+=================================================== */
+
+function moveJeep(locations,nextIndex){
+
+    const allDone = nextIndex === -1;
+
+    const routeItems =
+        document.querySelectorAll(".route-item");
+
+    if(routeItems.length === 0){
+        return;
     }
 
-    /* ==========================================================================
-       3. CABEÇALHO E MENSAGENS
-       ========================================================================== */
-    header {
-      text-align: center;
-      margin-bottom: 25px;
-      z-index: 2;
+    completedMessage.style.display =
+        allDone ? "block" : "none";
+
+    let targetItem;
+
+    if(allDone){
+        targetItem =
+            routeItems[routeItems.length - 1];
+    }else{
+        targetItem =
+            routeItems[nextIndex];
     }
 
-    h1 {
-      font-family: 'Mountains of Christmas', cursive;
-      font-size: 2.8rem;
-      color: #ef4444;
-      text-shadow: 0 0 12px rgba(239, 68, 68, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.8);
-      letter-spacing: 1px;
-    }
+    const top =
+        targetItem.offsetTop +
+        (targetItem.offsetHeight / 2) - 20;
 
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--text-gold);
-      font-weight: 600;
-      margin-top: 4px;
-    }
+    jeep.style.top = top + "px";
+}
 
-    .status-bar {
-      margin-top: 12px;
-      font-size: 0.85rem;
-      color: #94a3b8;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 6px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: inline-block;
-    }
+/* ===================================================
+   INICIALIZAÇÃO
+=================================================== */
 
-    /* Mensagem de percurso concluído */
-    .banner-concluido {
-      display: none;
-      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-      color: white;
-      font-size: 1.3rem;
-      font-weight: 700;
-      padding: 15px 25px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-      animation: bounce 1.5s infinite;
-      z-index: 10;
-    }
+loadRoute();
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
+setInterval(() => {
+    loadRoute();
+}, UPDATE_INTERVAL);
 
-    /* ==========================================================================
-       4. CONTAINER PRINCIPAL E ESTRADA
-       ========================================================================== */
-    .main-container {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      width: 100%;
-      max-width: 650px;
-      border-radius: 20px;
-      padding: 40px 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-    }
+</script>
 
-    .road-wrapper {
-      position: relative;
-      margin: 0 auto;
-      max-width: 480px;
-      padding: 20px 0;
-    }
-
-    /* Linha amarela contínua de fundo */
-    .road-line-bg {
-      position: absolute;
-      left: 120px;
-      top: 40px;
-      bottom: 40px;
-      width: 8px;
-      background-color: var(--color-yellow);
-      border-radius: 4px;
-      z-index: 1;
-      box-shadow: 0 0 10px var(--color-yellow-glow);
-    }
-
-    /* Linha verde de progresso */
-    .road-line-progress {
-      position: absolute;
-      left: 120px;
-      top: 40px;
-      height: 0;
-      width: 8px;
-      background-color: var(--color-green);
-      border-radius: 4px;
-      z-index: 2;
-      transition: height 1s ease-in-out;
-      box-shadow: 0 0 12px var(--color-green-glow);
-    }
-
-    /* ==========================================================================
-       5. PONTOS DO PERCURSO E LOCALIDADES
-       ========================================================================== */
-    .waypoint {
-      display: flex;
-      align-items: center;
-      position: relative;
-      height: 100px;
-      z-index: 3;
-    }
-
-    .waypoint:last-child {
-      height: 40px;
-    }
-
-    /* Círculo indicador do local */
-    .node-circle {
-      position: absolute;
-      left: 108px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: var(--color-yellow);
-      border: 4px solid #1a264c;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: #0f172a;
-      transition: all 0.5s ease;
-      box-shadow: 0 0 12px var(--color-yellow-glow);
-    }
-
-    .waypoint.completed .node-circle {
-      background-color: var(--color-green);
-      color: #ffffff;
-      box-shadow: 0 0 15px var(--color-green-glow);
-    }
-
-    /* Nome do local */
-    .location-info {
-      margin-left: 160px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .location-name {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--text-light);
-      text-transform: capitalize;
-      transition: color 0.3s ease;
-    }
-
-    .waypoint.completed .location-name {
-      color: #ffffff;
-    }
-
-    .waypoint.active .location-name {
-      color: var(--text-gold);
-      font-weight: 700;
-      text-shadow: 0 0 8px rgba(246, 196, 69, 0.5);
-    }
-
-    .badge-done {
-      display: none;
-      background: var(--color-green);
-      color: white;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 700;
-    }
-
-    .waypoint.completed .badge-done {
-      display: inline-block;
-    }
-
-    /* ==========================================================================
-       6. JIPE NATALINO (ILUSTRAÇÃO E ANIMAÇÃO)
-       ========================================================================== */
-    .jeep-container {
-      position: absolute;
-      left: 20px;
-      top: 20px;
-      z-index: 10;
-      transition: top 1s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .jeep-icon {
-      width: 75px;
-      height: 60px;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
-      animation: drive-bounce 0.6s infinite alternate ease-in-out;
-    }
-
-    @keyframes drive-bounce {
-      0% {
+</body>
+</html>
