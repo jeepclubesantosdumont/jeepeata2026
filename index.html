@@ -273,7 +273,7 @@ https://docs.google.com/spreadsheets/d/SEU_ID/export?format=csv&gid=0
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/1E7QJBlUk0kR5eXFFkAgqnYDBVEHry29ClCFTPONKnMI/export?format=csv&gid=0";
 
-const UPDATE_INTERVAL = 30000;
+const UPDATE_INTERVAL = 15000;
 
 /* ===================================================
    ELEMENTOS
@@ -338,7 +338,7 @@ async function loadRoute(){
         loading.style.display = "none";
 
         lastUpdate.innerHTML =
-            "Última atualização: " +
+            "12/12/2026 - Última atualização: " +
             new Date().toLocaleTimeString("pt-BR");
 
     }catch(error){
